@@ -21,5 +21,6 @@ public class EditableBufferedReader extends BufferedReader {
     public int readLine(){
         //readLine method llegeix la línia amb possibilitat d’editar-la.
     }
+//caca
 
 }
