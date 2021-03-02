@@ -19,10 +19,12 @@ public class EditableBufferedReader extends BufferedReader {
 
     public int read(){
         //read method llegeix el següent caràcter o la següent tecla de cursor.
+        return int;
     }
 
-    public int readLine(){
+    public String readLine(){
         //readLine method llegeix la línia amb possibilitat d’editar-la.
+        return null;
     }
 
 }
