@@ -1,8 +1,9 @@
 package practica
 
-import java.io.BufferedReader;
 
--1;
+import java.io.*;
+import java.util.*;
+
 
 public class EditableBufferedReader extends BufferedReader {
     
@@ -21,6 +22,5 @@ public class EditableBufferedReader extends BufferedReader {
     public int readLine(){
         //readLine method llegeix la línia amb possibilitat d’editar-la.
     }
-//caca
 
 }
