@@ -2,8 +2,8 @@ import java.io.*;
 
 public class EditableBufferedReader extends BufferedReader {
     
-    public EditableBufferedReader(Reader in, int sz) {
-        super(in, sz);
+    public EditableBufferedReader(Reader in) {
+        super(in);
         // TODO Auto-generated constructor stub
     }
 
@@ -18,6 +18,7 @@ public class EditableBufferedReader extends BufferedReader {
     public int read(){
         //read method llegeix el següent caràcter o la següent tecla de cursor.
         int i = 0;
+        i++;
         return 0;
     }
 
