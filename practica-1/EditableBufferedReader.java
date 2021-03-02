@@ -19,7 +19,7 @@ public class EditableBufferedReader extends BufferedReader {
 
     public int read(){
         //read method llegeix el següent caràcter o la següent tecla de cursor.
-        return int;
+        return 1;
     }
 
     public String readLine(){
