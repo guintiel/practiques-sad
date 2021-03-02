@@ -1,6 +1,4 @@
 import java.io.*;
-import java.util.*;
-
 
 public class EditableBufferedReader extends BufferedReader {
     
@@ -19,7 +17,7 @@ public class EditableBufferedReader extends BufferedReader {
 
     public int read(){
         //read method llegeix el següent caràcter o la següent tecla de cursor.
-        return int;
+        return 0;
     }
 
     public String readLine(){
