@@ -1,4 +1,4 @@
-# practiques-sad
+# practica-1
 
 Pràctica 1 SAD
 
