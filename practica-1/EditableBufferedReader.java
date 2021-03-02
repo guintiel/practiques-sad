@@ -4,7 +4,12 @@ import java.util.*;
 
 public class EditableBufferedReader extends BufferedReader {
     
-    public void setRaw(){
+    public EditableBufferedReader(Reader in, int sz) {
+        super(in, sz);
+        // TODO Auto-generated constructor stub
+    }
+
+    public void setRaw() {
         //setRaw method passa la consola de mode cooked a mode raw.
     }
 
