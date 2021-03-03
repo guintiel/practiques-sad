@@ -19,6 +19,7 @@ public class EditableBufferedReader extends BufferedReader {
         //read method llegeix el següent caràcter o la següent tecla de cursor.
         int i = 0;
         i++;
+        i++;
         return 0;
     }
 
