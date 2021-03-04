@@ -4,9 +4,11 @@ import java.io.*;
 
 public class EditableBufferedReader extends BufferedReader {
 
+    private Line linia;
+
     public EditableBufferedReader(Reader in) {
         super(in);
-        // TODO Auto-generated constructor stub
+        this.linia = new Line();
     }
 
     public void setRaw() {
@@ -24,7 +26,15 @@ public class EditableBufferedReader extends BufferedReader {
 
     public String readLine() {
         // readLine method llegeix la línia amb possibilitat d’editar-la.
-        return null;
+        int character = 0;
+        while(true){
+            character = this.read();
+
+
+            this.linia.addChar(character);
+        }
+
+        return this.linia.toString();
     }
 
 }
