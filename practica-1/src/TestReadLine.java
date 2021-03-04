@@ -1,3 +1,5 @@
+package src;
+
 import java.io.*;
 
 class TestReadLine {
@@ -6,7 +8,9 @@ class TestReadLine {
     String str = null;
     try {
       str = in.readLine();
-    } catch (IOException e) { e.printStackTrace(); }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     System.out.println("\nline is: " + str);
   }
 }
