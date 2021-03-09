@@ -27,9 +27,8 @@ public class EditableBufferedReader extends BufferedReader {
     public String readLine() {
         // readLine method llegeix la línia amb possibilitat d’editar-la.
         int character = 0;
-        while(true){
+        while (character != 'a') {
             character = this.read();
-
 
             this.linia.addChar(character);
         }
