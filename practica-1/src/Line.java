@@ -5,22 +5,18 @@ import java.util.*;
 public class Line {
 
     private ArrayList<Integer> list;
-    private Boolean editable;
-    private int lenght;
+    // private Boolean editable;
+    private int length;
 
-    public Line() {
+    public Line(int len) {
         this.list = new ArrayList<Integer>();
-        this.editable = true;
-        this.lenght = 0;
+        // this.editable = true;
+        this.length = len;
     }
 
-    public void addChar(int c) {
-
+    public void addCar(int car) {
+        list.add(car);
     }
-
-    /*
-     * public void removeChar(int c){ // a read }
-     */
 
     // public String toString(){
 
