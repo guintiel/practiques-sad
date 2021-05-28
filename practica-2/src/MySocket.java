@@ -11,22 +11,19 @@ public class MySocket extends Socket {
 
     public MySocket() throws IOException {
         super();
+        this.input = new BufferedReader(new InputStreamReader(this.getInputStream()));
+        this.output = new PrintWriter(this.getOutputStream(), true);
     }
 
     public MySocket(String host, int port) throws IOException {
         super();
+        this.input = new BufferedReader(new InputStreamReader(this.getInputStream()));
+        this.output = new PrintWriter(this.getOutputStream(), true);
     }
 
     public MySocket(String username, String host, int port) throws IOException {
         this(host, port);
-        try {
-            this.username = username;
-            this.input = new BufferedReader(new InputStreamReader(this.getInputStream()));
-            this.output = new PrintWriter(this.getOutputStream());
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-
+        this.username = username;
     }
 
     // public MySocket(InetAddress address, int port, InetAddress localAddr, int
@@ -51,13 +48,13 @@ public class MySocket extends Socket {
         this.username = name;
     }
 
-    public BufferedReader myGetInputStream() {
-        return this.input;
-    }
+    // public BufferedReader myGetInputStream() {
+    // return this.input;
+    // }
 
-    public PrintWriter myGetOutputStream() {
-        return this.output;
-    }
+    // public PrintWriter myGetOutputStream() {
+    // return this.output;
+    // }
 
     //
 
