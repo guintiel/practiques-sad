@@ -48,13 +48,13 @@ public class MySocket extends Socket {
         this.username = name;
     }
 
-    // public BufferedReader myGetInputStream() {
-    // return this.input;
-    // }
+    public BufferedReader myGetInputStream() {
+        return this.input;
+    }
 
-    // public PrintWriter myGetOutputStream() {
-    // return this.output;
-    // }
+    public PrintWriter myGetOutputStream() {
+        return this.output;
+    }
 
     //
 
