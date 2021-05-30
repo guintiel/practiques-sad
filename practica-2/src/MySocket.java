@@ -70,14 +70,14 @@ public class MySocket extends Socket {
         }
     }
 
-    public boolean ready() {
-        try {
-            return this.input.ready();
-        } catch (IOException e) {
-            System.out.println("El socket no està llest");
-        }
-        return false;
-    }
+    // public boolean ready() {
+    // try {
+    // return this.input.ready();
+    // } catch (IOException e) {
+    // System.out.println("El socket no està llest");
+    // }
+    // return false;
+    // }
 
     public String readLine() {
         String s = null;

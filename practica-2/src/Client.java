@@ -12,7 +12,7 @@ public class Client {
         // this.username = username;
         // this.host = host;
         try {
-            ms = new MySocket(username, host, 8888);
+            this.ms = new MySocket(username, host, 8888);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -41,17 +41,18 @@ public class Client {
 
         @Override
         public void run() {
-            try {
-                BufferedReader in = ms.myGetInputStream();
-                String line = null;
-                while ((line = in.readLine()) != null) {
-                    System.out.println(line);
-                }
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
+            String line = null;
+            while ((line = ms.readLine()) != null) {
+                System.out.println(line);
             }
 
         }
 
+    }
+
+    public static void main(String[] args) {
+        Client c = new Client("jordi", "127.0.0.1");
+        new Thread(c.new ReadMessages()).start();
+        new Thread(c.new SendMessages()).start();
     }
 }
