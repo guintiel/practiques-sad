@@ -36,10 +36,6 @@ public class MySocket extends Socket {
     // super();
     // }
 
-    public Socket getSocket() {
-        return this;
-    }
-
     public String getUsername() {
         return this.username;
     }

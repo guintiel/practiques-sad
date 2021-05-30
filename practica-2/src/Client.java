@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 
 public class Client {
 
@@ -26,10 +25,9 @@ public class Client {
         public void run() {
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-                PrintWriter out = ms.myGetOutputStream();
                 String line = null;
                 while ((line = in.readLine()) != null) {
-                    out.println(line);
+                    ms.writeLine(line);
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
