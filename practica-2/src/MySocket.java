@@ -4,44 +4,27 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class MySocket extends Socket {
+public class MySocket {
+    private Socket s;
     private String username;
     private BufferedReader input;
     private PrintWriter output;
 
-    public MySocket() throws IOException {
-        super();
-        this.input = new BufferedReader(new InputStreamReader(this.getInputStream()));
-        this.output = new PrintWriter(this.getOutputStream(), true);
-    }
-
-    public MySocket(String host, int port) throws IOException {
-        super();
-        this.input = new BufferedReader(new InputStreamReader(this.getInputStream()));
-        this.output = new PrintWriter(this.getOutputStream(), true);
-    }
-
     public MySocket(String username, String host, int port) throws IOException {
-        this(host, port);
+        this.s = new Socket(host, port);
         this.username = username;
+        this.input = new BufferedReader(new InputStreamReader(this.s.getInputStream()));
+        this.output = new PrintWriter(this.s.getOutputStream(), true);
     }
 
-    // public MySocket(InetAddress address, int port, InetAddress localAddr, int
-    // localPort) throws IOException {
-    // super();
-    // }
-
-    // public MySocket(String host, int port, InetAddress localAddr, int localPort)
-    // throws IOException {
-    // super();
-    // }
-
-    public String getUsername() {
-        return this.username;
+    public MySocket(Socket s) throws IOException {
+        this.s = s;
+        this.input = new BufferedReader(new InputStreamReader(this.s.getInputStream()));
+        this.output = new PrintWriter(this.s.getOutputStream(), true);
     }
 
-    public void setName(String name) {
-        this.username = name;
+    public Socket getSocket() {
+        return this.s;
     }
 
     public BufferedReader myGetInputStream() {
@@ -66,7 +49,7 @@ public class MySocket extends Socket {
             this.input.close();
             this.close();
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println(e.getStackTrace());
         }
     }
 
@@ -99,20 +82,6 @@ public class MySocket extends Socket {
 
     public void println(String s) {
         this.output.println(s);
-    }
-
-    public void sendUsername() {
-        this.output.println(this.username);
-        System.out.println("Username enviat: " + this.username);
-    }
-
-    public String receiveUserName() {
-        return this.readLine();
-    }
-
-    public String setUsername() {
-        this.username = this.readLine();
-        return this.username;
     }
 
 }

@@ -5,42 +5,20 @@ import java.net.SocketAddress;
 
 public class MyServerSocket extends ServerSocket {
 
-    // public MyServerSocket() throws IOException {
-    // super();
-    // }
-
     public MyServerSocket(int port) throws IOException {
-        super();
+        super(port);
     }
-
-    // public MyServerSocket(int port, int backlog) throws IOException {
-    // super();
-    // }
-
-    // public MyServerSocket(int port, int backlog, InetAddress bindAddr) throws
-    // IOException {
-    // super();
-    // }
 
     // Methods
 
-    public void bind(SocketAddress endpoint) {
-        try {
-            super.bind(endpoint);
-        } catch (IOException e) {
-            System.out.println("Ha fallat el bind a: " + endpoint);
-        }
-
-    }
-
-    public MySocket accept() {
+    public Socket accept() {
         Socket s = null;
         try {
             s = super.accept();
         } catch (IOException e) {
             System.out.println("Ha fallat accept");
         }
-        return (MySocket) s;
+        return s;
     }
 
     public void close() {
