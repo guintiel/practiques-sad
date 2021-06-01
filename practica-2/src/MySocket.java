@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class MySocket {
+
     private Socket s;
     private String username;
     private BufferedReader input;
@@ -26,6 +27,10 @@ public class MySocket {
     public Socket getSocket() {
         return this.s;
     }
+    
+    public String getUsername(){
+        return this.username;
+    }
 
     public BufferedReader myGetInputStream() {
         return this.input;
@@ -36,52 +41,65 @@ public class MySocket {
     }
 
     //
-
     public void flush() {
         this.output.flush();
     }
 
     //
-
     public void close() {
         try {
-            this.output.close();
             this.input.close();
-            this.close();
+            this.output.close();
+            
+            System.out.println("INPUT i OUTPUT tancats bruh");
+            this.getSocket().close();
         } catch (IOException e) {
-            System.out.println(e.getStackTrace());
+            System.out.println("Error al tancar");
         }
     }
 
-    // public boolean ready() {
-    // try {
-    // return this.input.ready();
-    // } catch (IOException e) {
-    // System.out.println("El socket no està llest");
-    // }
-    // return false;
-    // }
+    public boolean ready() {
+        try {
+            return this.input.ready();
+        } catch (IOException e) {
+            System.out.println("El socket no està llest");
+        }
+        return false;
+    }
 
     public String readLine() {
-        String s = null;
+        String st = null;
         try {
-            s = this.input.readLine();
+            st = this.input.readLine();
+            return st;
         } catch (IOException e) {
-            System.out.println(e);
+            return st;
+            /*System.out.println("Error al llegir pel socket");
+            e.printStackTrace();
+            System.out.println("Passa al socket: " + this.toString() + "\nPort desti: " + this.getSocket().getPort());
+            System.out.println("Port font: " + this.getSocket().getLocalPort());*/
         }
-        return s;
+        
     }
-
-    public void writeLine(String s) {
+    
+    public void sendUsername(){
         try {
-            this.output.write(s);
+            this.output.println(this.username);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Falla a l'enviar el nom d'usuari.");
         }
     }
 
-    public void println(String s) {
-        this.output.println(s);
+    public void writeLine(String st) {
+        try {
+            this.output.write(st);
+        } catch (Exception e) {
+            System.out.println("Error a l'escriure pel socket");
+        }
+    }
+
+    public void println(String st) {
+        this.output.println(st);
     }
 
 }

@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 
 public class MyServerSocket extends ServerSocket {
 
@@ -11,6 +10,7 @@ public class MyServerSocket extends ServerSocket {
 
     // Methods
 
+    @Override
     public Socket accept() {
         Socket s = null;
         try {
@@ -21,6 +21,7 @@ public class MyServerSocket extends ServerSocket {
         return s;
     }
 
+    @Override
     public void close() {
         try {
             super.close();

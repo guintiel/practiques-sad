@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Client {
 
@@ -28,11 +26,11 @@ public class Client {
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
                 String line = null;
-                System.out.println("Hey, vaig a llegir");
-                while ((line = in.readLine()) != null) {
-                    ms.println(line);
+                // System.out.println("Hey, vaig a llegir");
+                while (!ms.getSocket().isClosed() && (line = in.readLine()) != null) {
+                    ms.println(ms.getUsername() + "\n" + line);
                     if (line.equals("close")) {
-                        System.out.println("Tanco socket bro");
+                        System.out.println("Tanco socket");
                         ms.close();
                     }
                 }
@@ -48,11 +46,13 @@ public class Client {
 
         @Override
         public void run() {
-            String line = null;
-            System.out.println("Hey, vull escriure");
-            while ((line = ms.readLine()) != null && !ms.getSocket().isClosed()) {
-                System.out.println("Hey, tinc algo per rebre!");
-                System.out.println(line);
+            String line;
+            // System.out.println("Hey, vull escriure");
+            while (!ms.getSocket().isClosed()) {
+                if ((line = ms.readLine()) != null) {
+                    System.out.println("Hey, tinc algo per rebre!");
+                    System.out.println(line);
+                }
             }
 
         }
@@ -66,10 +66,11 @@ public class Client {
             String user = b.readLine();
             System.out.println("Hola, " + user);
             Client c = new Client(user, "0.0.0.0", 55555);
+            System.out.println("Estas enviant mitjançant el port: " + c.getSocket().getSocket().getLocalPort());
             new Thread(c.new SendMessages()).start();
             new Thread(c.new ReceiveMessages()).start();
         } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
         }
     }
 }

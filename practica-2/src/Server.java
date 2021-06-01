@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Server {
 
     private Map<Integer, MySocket> sockets = new HashMap<Integer, MySocket>();
-    private ReentrantLock mon = new ReentrantLock();
+    private final ReentrantLock mon = new ReentrantLock();
 
     // public static final int port = 55555;
     public class Intermediari implements Runnable {
@@ -24,29 +23,38 @@ public class Server {
         @Override
         public void run() {
             mon.lock();
-            // La clau de cada socket es el port que esta utilitzant el client
-            sockets.put(this.socketServidor.getSocket().getPort(), socketServidor);
-            mon.unlock();
-            while (true) {
+            try {
+                // La clau de cada socket es el port que esta utilitzant el client
+                sockets.put(this.socketServidor.getSocket().getPort(), socketServidor);
+            } finally {
+                mon.unlock();
+            }
+            while (true && !this.socketServidor.getSocket().isClosed()) {
                 // Lectura des del servidor, llegeix un missatge del client associat a
                 // l'intermediari
                 String missatge = this.socketServidor.readLine();
                 System.out.println("Missatge enviat: " + missatge);
                 if (missatge.equals("close")) {
                     mon.lock();
-                    sockets.remove(this.socketServidor.getSocket().getPort());
+                    try {
+                        sockets.remove(this.socketServidor.getSocket().getPort());
+                    } finally {
+                        mon.unlock();
+                    }
                     this.socketServidor.close();
-                    mon.unlock();
                 } else {
                     mon.lock();
-                    sockets.forEach((Integer k, MySocket socket) -> {
-                        System.out.println("ah ok");
-                        if (k != this.socketServidor.getSocket().getPort()) {
-                            socket.println(missatge);
-                        }
+                    try {
+                        sockets.forEach((Integer k, MySocket socket) -> {
+                            System.out.println("ah ok");
+                            if (k != this.socketServidor.getSocket().getPort()) {
+                                socket.println(missatge);
+                            }
 
-                    });
-                    mon.unlock();
+                        });
+                    } finally {
+                        mon.unlock();
+                    }
                 }
                 // Escriptura des del servidor, escriu a la resta de sockets que no son ell.
 
