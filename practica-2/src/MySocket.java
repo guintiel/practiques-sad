@@ -27,8 +27,8 @@ public class MySocket {
     public Socket getSocket() {
         return this.s;
     }
-    
-    public String getUsername(){
+
+    public String getUsername() {
         return this.username;
     }
 
@@ -40,31 +40,14 @@ public class MySocket {
         return this.output;
     }
 
-    //
-    public void flush() {
-        this.output.flush();
-    }
-
-    //
     public void close() {
         try {
             this.input.close();
             this.output.close();
-            
-            System.out.println("INPUT i OUTPUT tancats bruh");
             this.getSocket().close();
         } catch (IOException e) {
             System.out.println("Error al tancar");
         }
-    }
-
-    public boolean ready() {
-        try {
-            return this.input.ready();
-        } catch (IOException e) {
-            System.out.println("El socket no està llest");
-        }
-        return false;
     }
 
     public String readLine() {
@@ -74,32 +57,36 @@ public class MySocket {
             return st;
         } catch (IOException e) {
             return st;
-            /*System.out.println("Error al llegir pel socket");
-            e.printStackTrace();
-            System.out.println("Passa al socket: " + this.toString() + "\nPort desti: " + this.getSocket().getPort());
-            System.out.println("Port font: " + this.getSocket().getLocalPort());*/
         }
-        
-    }
-    
-    public void sendUsername(){
-        try {
-            this.output.println(this.username);
-        } catch (Exception e) {
-            System.out.println("Falla a l'enviar el nom d'usuari.");
-        }
-    }
 
-    public void writeLine(String st) {
-        try {
-            this.output.write(st);
-        } catch (Exception e) {
-            System.out.println("Error a l'escriure pel socket");
-        }
     }
 
     public void println(String st) {
         this.output.println(st);
     }
 
+    public void sendUsername() {
+        this.output.println(this.username);
+    }
+
+    public void rcvAndSetUsername() {
+        try {
+            this.username = this.input.readLine();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public boolean verifyUsername(String nick) {
+        // Obre un socket paral·lel (admin) amb el servidor i li demana si ja existeix
+        // l'usuari
+        // true si no existeix, false si ja existeix
+        this.output.println(nick);
+        try {
+            return Boolean.parseBoolean(this.input.readLine());
+        } catch (IOException ex) {
+            ex.getMessage();
+            return true;
+        }
+    }
 }

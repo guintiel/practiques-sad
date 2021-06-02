@@ -26,11 +26,9 @@ public class Client {
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
                 String line = null;
-                // System.out.println("Hey, vaig a llegir");
                 while (!ms.getSocket().isClosed() && (line = in.readLine()) != null) {
-                    ms.println(ms.getUsername() + "\n" + line);
+                    ms.println("@" + ms.getUsername() + ": " + line);
                     if (line.equals("close")) {
-                        System.out.println("Tanco socket");
                         ms.close();
                     }
                 }
@@ -47,10 +45,8 @@ public class Client {
         @Override
         public void run() {
             String line;
-            // System.out.println("Hey, vull escriure");
             while (!ms.getSocket().isClosed()) {
                 if ((line = ms.readLine()) != null) {
-                    System.out.println("Hey, tinc algo per rebre!");
                     System.out.println(line);
                 }
             }
@@ -64,9 +60,21 @@ public class Client {
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Quin es el teu nom d'usuari?");
             String user = b.readLine();
-            System.out.println("Hola, " + user);
+            // Client demana si esta disponible un username mitjançant un socket
+            // admin, que es connectara a una connexio paral·lela amb el servidor
+            MySocket admin = new MySocket("admin", "0.0.0.0", 44444);
+            while (user.equals("admin")) {
+                System.out.println("Nom reservat, tria'n un altre:");
+                user = b.readLine();
+            }
+            while (!admin.verifyUsername(user)) {
+                System.out.println("Nick en us, prova un altre:");
+                user = b.readLine();
+            }
+            // Usuari registrat
+            System.out.println("Hola, " + user + ".\nBenvinguda/t al xat. Envia un missatge:\nEnvia close per sortir.");
             Client c = new Client(user, "0.0.0.0", 55555);
-            System.out.println("Estas enviant mitjançant el port: " + c.getSocket().getSocket().getLocalPort());
+            c.getSocket().sendUsername();
             new Thread(c.new SendMessages()).start();
             new Thread(c.new ReceiveMessages()).start();
         } catch (IOException ex) {

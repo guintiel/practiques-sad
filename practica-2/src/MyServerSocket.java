@@ -8,8 +8,6 @@ public class MyServerSocket extends ServerSocket {
         super(port);
     }
 
-    // Methods
-
     @Override
     public Socket accept() {
         Socket s = null;
