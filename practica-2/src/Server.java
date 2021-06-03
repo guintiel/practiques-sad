@@ -6,8 +6,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Server {
 
-    private Map<String, MySocket> sockets = new HashMap<String, MySocket>();
+    private final Map<String, MySocket> sockets = new HashMap<>();
     private final ReentrantLock mon = new ReentrantLock();
+    private final String hostListening = "0.0.0.0";
+    private final int portListening = 55555;
+    private final int portListeningUsers = 44444;
 
     public class Intermediari implements Runnable {
 
@@ -28,14 +31,23 @@ public class Server {
             } finally {
                 mon.unlock();
             }
-            while (true && !this.socketServidor.getSocket().isClosed()) {
+            while (!this.socketServidor.getSocket().isClosed()) {
                 // Lectura des del servidor, llegeix un missatge del client associat a
                 // l'intermediari
                 String missatge = this.socketServidor.readLine();
+                System.out.println("Missatge rebut: " + missatge);
                 if (missatge.equals("@" + this.socketServidor.getUsername() + ": " + "close")) {
+                    System.out.println(this.socketServidor.getUsername());
                     mon.lock();
+                    System.out.println("Entra al monitor");
                     try {
                         sockets.remove(this.socketServidor.getUsername());
+                        sockets.forEach((String u, MySocket socket) -> {
+                            if (!u.equals(this.socketServidor.getUsername())) {
+                                socket.println("@" + this.socketServidor.getUsername() + " ha abandonat el xat");
+                            }
+
+                        });
                     } finally {
                         mon.unlock();
                     }
@@ -68,8 +80,8 @@ public class Server {
 
         private MyServerSocket checker;
 
-        public UsernameCheck(int port) throws IOException {
-            checker = new MyServerSocket(port);
+        public UsernameCheck(String host, int port) throws IOException {
+            checker = new MyServerSocket(host, port);
         }
 
         @Override
@@ -102,8 +114,8 @@ public class Server {
         // connectar amb un altre client li ha d'acceptar la connexió
         try {
             Server s = new Server();
-            new Thread(s.new UsernameCheck(44444)).start();
-            MyServerSocket ss = new MyServerSocket(55555);
+            new Thread(s.new UsernameCheck(s.hostListening, s.portListeningUsers)).start();
+            MyServerSocket ss = new MyServerSocket(s.hostListening, s.portListening);
             System.out.println("Server escoltant en port: " + ss.getLocalPort());
             System.out.println("Adreça local: " + ss.getInetAddress());
             while (true) {
@@ -111,6 +123,19 @@ public class Server {
                 MySocket ms = new MySocket(socketS);
                 ms.rcvAndSetUsername();
                 System.out.println("Client acceptat: " + ms.getUsername());
+                s.mon.lock();
+                try {
+                    // Escriptura des del servidor, escriu a la resta de sockets que no son ell.
+                    s.sockets.forEach((String u, MySocket socket) -> {
+                        if (!u.equals(ms.getUsername())) {
+                            socket.println("@" + ms.getUsername() + " ha entrat al xat");
+                        }
+
+                    });
+                } finally {
+                    s.mon.unlock();
+                }
+
                 Thread intermediari = new Thread(s.new Intermediari(ms));
                 intermediari.start();
             }
@@ -119,5 +144,4 @@ public class Server {
         }
 
     }
-
 }

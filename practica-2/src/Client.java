@@ -63,12 +63,12 @@ public class Client {
             // Client demana si esta disponible un username mitjançant un socket
             // admin, que es connectara a una connexio paral·lela amb el servidor
             MySocket admin = new MySocket("admin", "0.0.0.0", 44444);
-            while (user.equals("admin")) {
-                System.out.println("Nom reservat, tria'n un altre:");
-                user = b.readLine();
-            }
             while (!admin.verifyUsername(user)) {
                 System.out.println("Nick en us, prova un altre:");
+                user = b.readLine();
+            }
+            while (user.equals("admin")) {
+                System.out.println("Nom reservat, tria'n un altre:");
                 user = b.readLine();
             }
             // Usuari registrat

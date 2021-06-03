@@ -1,11 +1,17 @@
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class MyServerSocket extends ServerSocket {
 
     public MyServerSocket(int port) throws IOException {
         super(port);
+    }
+
+    public MyServerSocket(String address, int port) throws UnknownHostException, IOException {
+        super(port, 0, InetAddress.getByName(address));
     }
 
     @Override
