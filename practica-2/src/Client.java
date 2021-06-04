@@ -58,11 +58,14 @@ public class Client {
     public static void main(String[] args) {
         try {
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
+            final String hostToConnect = "0.0.0.0";
+            final int portUsernames = 44444;
+            final int portToConnect = 55555;
             System.out.println("Quin es el teu nom d'usuari?");
             String user = b.readLine();
             // Client demana si esta disponible un username mitjançant un socket
             // admin, que es connectara a una connexio paral·lela amb el servidor
-            MySocket admin = new MySocket("admin", "0.0.0.0", 44444);
+            MySocket admin = new MySocket("admin", hostToConnect, portUsernames);
             while (!admin.verifyUsername(user)) {
                 System.out.println("Nick en us, prova un altre:");
                 user = b.readLine();
@@ -73,7 +76,7 @@ public class Client {
             }
             // Usuari registrat
             System.out.println("Hola, " + user + ".\nBenvinguda/t al xat. Envia un missatge:\nEnvia close per sortir.");
-            Client c = new Client(user, "0.0.0.0", 55555);
+            Client c = new Client(user, hostToConnect, portToConnect);
             c.getSocket().sendUsername();
             new Thread(c.new SendMessages()).start();
             new Thread(c.new ReceiveMessages()).start();

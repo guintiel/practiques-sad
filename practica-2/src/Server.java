@@ -24,10 +24,19 @@ public class Server {
 
         @Override
         public void run() {
+            System.out.println("Client acceptat: " + this.socketServidor.getUsername());
             mon.lock();
             try {
                 // La clau de cada socket es el port que esta utilitzant el client
-                sockets.put(this.socketServidor.getUsername(), socketServidor);
+                sockets.put(this.socketServidor.getUsername(), this.socketServidor);
+                System.out.println("Hi ha " + sockets.size() + " usuaris connectats\n" + sockets.keySet().toString());
+                sockets.forEach((String u, MySocket socket) -> {
+                    socket.println("Hi ha " + sockets.size() + " usuaris connectats\n" + sockets.keySet().toString());
+                    if (!u.equals(this.socketServidor.getUsername())) {
+                        socket.println("@" + this.socketServidor.getUsername() + " ha entrat al xat");
+
+                    }
+                });
             } finally {
                 mon.unlock();
             }
@@ -35,16 +44,16 @@ public class Server {
                 // Lectura des del servidor, llegeix un missatge del client associat a
                 // l'intermediari
                 String missatge = this.socketServidor.readLine();
-                System.out.println("Missatge rebut: " + missatge);
                 if (missatge.equals("@" + this.socketServidor.getUsername() + ": " + "close")) {
                     System.out.println(this.socketServidor.getUsername());
                     mon.lock();
-                    System.out.println("Entra al monitor");
                     try {
                         sockets.remove(this.socketServidor.getUsername());
                         sockets.forEach((String u, MySocket socket) -> {
                             if (!u.equals(this.socketServidor.getUsername())) {
                                 socket.println("@" + this.socketServidor.getUsername() + " ha abandonat el xat");
+                                socket.println("Hi ha " + sockets.size() + " usuaris connectats\n"
+                                        + sockets.keySet().toString());
                             }
 
                         });
@@ -122,22 +131,7 @@ public class Server {
                 Socket socketS = ss.accept();
                 MySocket ms = new MySocket(socketS);
                 ms.rcvAndSetUsername();
-                System.out.println("Client acceptat: " + ms.getUsername());
-                s.mon.lock();
-                try {
-                    // Escriptura des del servidor, escriu a la resta de sockets que no son ell.
-                    s.sockets.forEach((String u, MySocket socket) -> {
-                        if (!u.equals(ms.getUsername())) {
-                            socket.println("@" + ms.getUsername() + " ha entrat al xat");
-                        }
-
-                    });
-                } finally {
-                    s.mon.unlock();
-                }
-
-                Thread intermediari = new Thread(s.new Intermediari(ms));
-                intermediari.start();
+                (new Thread(s.new Intermediari(ms))).start();
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
