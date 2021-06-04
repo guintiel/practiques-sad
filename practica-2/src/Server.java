@@ -31,10 +31,14 @@ public class Server {
                 sockets.put(this.socketServidor.getUsername(), this.socketServidor);
                 System.out.println("Hi ha " + sockets.size() + " usuaris connectats\n" + sockets.keySet().toString());
                 sockets.forEach((String u, MySocket socket) -> {
-                    socket.println("Hi ha " + sockets.size() + " usuaris connectats\n" + sockets.keySet().toString());
                     if (!u.equals(this.socketServidor.getUsername())) {
                         socket.println("@" + this.socketServidor.getUsername() + " ha entrat al xat");
-
+                    }
+                    if (sockets.size() == 1) {
+                        socket.println("[!] Ets l'unic/a connectat/da al xat");
+                    } else {
+                        socket.println(
+                                "[!] Hi ha " + sockets.size() + " usuaris connectats\n" + sockets.keySet().toString());
                     }
                 });
             } finally {
@@ -52,17 +56,19 @@ public class Server {
                         sockets.forEach((String u, MySocket socket) -> {
                             if (!u.equals(this.socketServidor.getUsername())) {
                                 socket.println("@" + this.socketServidor.getUsername() + " ha abandonat el xat");
-                                socket.println("Hi ha " + sockets.size() + " usuaris connectats\n"
-                                        + sockets.keySet().toString());
+                                if (sockets.size() == 1) {
+                                    socket.println("[!] Ets l'unic/a connectat/da al xat");
+                                } else {
+                                    socket.println("[!] Hi ha " + sockets.size() + " usuaris connectats\n"
+                                            + sockets.keySet().toString());
+                                }
                             }
-
                         });
                     } finally {
                         mon.unlock();
                     }
                     System.out.println("Client que marxa: " + this.socketServidor.getUsername());
                     this.socketServidor.close();
-
                 } else {
                     mon.lock();
                     try {
@@ -71,13 +77,11 @@ public class Server {
                             if (!u.equals(this.socketServidor.getUsername())) {
                                 socket.println(missatge);
                             }
-
                         });
                     } finally {
                         mon.unlock();
                     }
                 }
-
             }
         }
     }
@@ -136,6 +140,5 @@ public class Server {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
     }
 }

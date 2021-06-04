@@ -27,8 +27,8 @@ public class MySocket {
     public Socket getSocket() {
         return this.s;
     }
-
-    public String getUsername() {
+    
+    public String getUsername(){
         return this.username;
     }
 
@@ -58,29 +58,28 @@ public class MySocket {
         } catch (IOException e) {
             return st;
         }
-
+        
     }
-
+    
     public void println(String st) {
         this.output.println(st);
     }
-
-    public void sendUsername() {
-        this.output.println(this.username);
+    
+    public void sendUsername(){
+        this.output.println(this.username);     
     }
-
-    public void rcvAndSetUsername() {
+    
+    public void rcvAndSetUsername(){
         try {
             this.username = this.input.readLine();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
-
-    public boolean verifyUsername(String nick) {
-        // Obre un socket paral·lel (admin) amb el servidor i li demana si ja existeix
-        // l'usuari
-        // true si no existeix, false si ja existeix
+    
+    public boolean verifyUsername(String nick){
+        //Obre un socket paral·lel (admin) amb el servidor i li demana si ja existeix l'usuari
+        //true si no existeix, false si ja existeix
         this.output.println(nick);
         try {
             return Boolean.parseBoolean(this.input.readLine());

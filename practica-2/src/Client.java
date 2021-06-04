@@ -35,9 +35,7 @@ public class Client {
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-
         }
-
     }
 
     public class ReceiveMessages implements Runnable {
@@ -50,9 +48,7 @@ public class Client {
                     System.out.println(line);
                 }
             }
-
         }
-
     }
 
     public static void main(String[] args) {
@@ -75,7 +71,9 @@ public class Client {
                 user = b.readLine();
             }
             // Usuari registrat
+            System.out.println("-----------------------------------------");
             System.out.println("Hola, " + user + ".\nBenvinguda/t al xat. Envia un missatge:\nEnvia close per sortir.");
+            System.out.println("-----------------------------------------");
             Client c = new Client(user, hostToConnect, portToConnect);
             c.getSocket().sendUsername();
             new Thread(c.new SendMessages()).start();
